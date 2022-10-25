@@ -1,18 +1,16 @@
-# CircuitPython
-This repository will actually serve as a aid to help you get started with your own template.  You should copy the raw form of this readme into your own, and use this template to write your own.  If you want to draw inspiration from other classmates, feel free to check [this directory of all students!](https://github.com/chssigma/Class_Accounts).
+# CAD
 ## Table of Contents
 * [Table of Contents](#TableOfContents)
-* [Hello_CircuitPython](#Hello_CircuitPython)
+* [Teamwork makes the Dreamwork](#Teamwork_makes_the_Dreamwork)
 * [CircuitPython_Servo](#CircuitPython_Servo)
 * [CircuitPython_LCD](#CircuitPython_LCD)
 * [NextAssignmentGoesHere](#NextAssignment)
 ---
 
-## Hello_CircuitPython
+## Teamwork_makes_the_Dreamwork
 
 ### Description & Code
-Description goes here
-
+This was the first assighnment and was suposed to teach me how to work in a team and how to work 
 Here's how you make code look like code:
 
 ```python
@@ -23,8 +21,8 @@ Code goes here
 
 ### Evidence
 
-
-![spinningMetro_Optimized](https://user-images.githubusercontent.com/54641488/192549584-18285130-2e3b-4631-8005-0792c2942f73.gif)
+###4.1
+![Screenshot 2022-10-25 100916](https://user-images.githubusercontent.com/112961442/197796901-fcc5ab51-ddf2-4cf3-b10a-80cc74e98bc4.png)
 
 
 And here is how you should give image credit to someone, if you use their work:
