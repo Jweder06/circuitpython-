@@ -32,8 +32,7 @@ while True:
 
 And here is how you should give image credit to someone, if you use their work:
 
-Image credit goes to [Rick A](https://www.youtube.com/watch?v=dQw4w9WgXcQ&scrlybrkr=8931d0bc)
-
+Image and code credit goes to paul weder
 
 
 ### Wiring
@@ -46,7 +45,7 @@ Image credit goes to [Adafruit Industries](https://www.adafruit.com/product/4000
 
 ### Reflection
 
-The hardest part about this assignment is trying to set up visual studio code to make it compatible with everything. It was also the very first time I had ever touched circuit python, and the language was very different to what I was used to; Arduino language. 
+The toughest thing about this assignment is getting Visual Studio Code to work with everything. Plus, it's my first time dealing with CircuitPython, and the language is completely different from what I'm used to, which is the Arduino language.
 
 
 
@@ -58,33 +57,29 @@ The hardest part about this assignment is trying to set up visual studio code to
 The purpose of this assignment is to make a servo move using the Adafruit metro board 
 
 ```python
-import board                       #[1-16] Setup for Buttons                 
-import time                        #And servo
-import math
-import pwmio 
+# SPDX-FileCopyrightText: 2018 Kattni Rembor for Adafruit Industries
+#
+# SPDX-License-Identifier: MIT
+
+"""CircuitPython Essentials Servo standard servo example"""
+import time
+import board
+import pwmio
 from adafruit_motor import servo
-from digitalio import DigitalInOut, Direction, Pull
-btn = DigitalInOut(board.D3)
-btn2 = DigitalInOut(board.D2)
-btn.direction = Direction.INPUT
-btn2.direction = Direction.INPUT
-btn.pull = Pull.UP
-btn2.pull = Pull.UP
 
-pwm = pwmio.PWMOut(board.D5, duty_cycle=2 **15, frequency=50)
-myServo = servo.Servo(pwm)
+# create a PWMOut object on Pin A2.
+pwm = pwmio.PWMOut(board.D7, duty_cycle=2 ** 15, frequency=300)
 
-print("starting") 
-while True:                 #[17-27]If a button is pressed
-    print("re")             #Rotate to either 180 or 0
-    if btn.value == True:
-        myServo.angle = 180
-        time.sleep(1)
-        print("Right")
-    elif btn2.value == True :
-        myServo.angle = 0
-        time.sleep(1)
-        print("Left")
+# Create a servo object, my_servo.
+my_servo = servo.Servo(pwm)
+
+while True:
+    for angle in range(0, 180, 5):  # 0 - 180 degrees, 5 degrees at a time.
+        my_servo.angle = angle
+        time.sleep(0.05)
+    for angle in range(180, 0, -5): # 180 - 0 degrees, 5 degrees at a time.
+        my_servo.angle = angle
+        time.sleep(0.05)
 ```
 
 ### Evidence
