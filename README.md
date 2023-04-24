@@ -30,7 +30,6 @@ while True:
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/helloworld.gif.gif?raw=true)
 
-And here is how you should give image credit to someone, if you use their work:
 
 Image and code credit goes to paul weder
 
