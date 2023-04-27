@@ -85,79 +85,70 @@ while True:
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/spinner.gif.gif?raw=true)
 
+Credit goes to anton weder(I couldent extract my own video from canvas)
 ### Wiring
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/spinnerwiring.png?raw=true)
-
+Credit goes to anton weder
 ### Reflection
 
-Adding a servo to the complexity of the code was a bit tricky, as the terminology was very different and new to me, but again, google came to help. The only tricky part really was having to move files from one lib folder to another, to allow the motor to actually spin. If I was to do this assignment again, I would definitely research servos more, to help with my knowledge of the functions of the motor. 
-
-
+This was the firt time that we used a external output with circut python and using circut python to control power running through the arduino.For this assignment I mostly copied their code and wiring while I was still adjusting to using libraries in circut python.
 
 ## CircuitPython_DistanceSensor
 
-The purpose of this assignment is to turn the neopixel different colors corresponding to the distance measured on the HC-SR04 ultrasonic sensor. We want neopixel to turn red when your object is less than 5cm, blue when between 5 and 20cm, and green when farther than 20cm. Simultaneously, the distance is being printed on the serial monitor. 
+In this assignment we where tasked with controlling a light on the arduino with a distance sensor where the sensor would swich the light at different distances. We only used a distance sensor for this assignment and the light did not require any wiring.
 
 ### Description & Code
 
 ```python
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
-import digitalio
-import simpleio
 import time
 import board
 import adafruit_hcsr04
-import neopixel                       
-from board import *
+import neopixel
+import simpleio
 
-sonar = adafruit_hcsr04.HCSR04(trigger_pin=board.D3, echo_pin=board.D2)
-Anton = neopixel.NeoPixel(board.NEOPIXEL, 1)#connecting the neopixel on the board to the code
-Anton.brightness = 0.1
-1  #setting the brightness of the light, from 0-1 brightness
-AntonOutput = 0
-Red = 0
-Green = 0
-Blue = 0
+sonar = adafruit_hcsr04.HCSR04(trigger_pin=board.D7, echo_pin=board.D6)
+Dot = neopixel.NeoPixel(board.NEOPIXEL, 1)
+Dot.brightness = .3
 
 while True:
     try:
-        cm = sonar.distance 
-        print((sonar.distance, Red, Green, Blue))
+        cm = sonar.distance
+        simpleio.map_range(cm, 0, 20, 3, 20)
+        print((sonar.distance))
+        if cm < 7.5:
+            r = simpleio.map_range(cm, 0, 6.5, 255, 0)
+            g = simpleio.map_range(cm, 5, 7.5, 0, 230)
+            Dot.fill((r, g, 0))
+        if cm > 7.5 and cm < 12.5:
+            g = simpleio.map_range(cm, 7.5, 10, 255, 0)
+            b = simpleio.map_range(cm, 9, 12.5, 0, 230)
+            Dot.fill((0, g, b))
+        if cm > 12.5 and cm < 17.5:
+            b = simpleio.map_range(cm, 12.5, 15, 255, 0)
+            r = simpleio.map_range(cm, 14, 17.5, 0, 240)
+            Dot.fill((r, 0, b))
         time.sleep(0.1)
-        if cm < 5: #turns the LED a certain color if the distance is less than 5 cm 
-            Blue = 0
-            Red = 255
-            Anton.fill((Red, 0, 0))#setting the color with RGB values
-        if cm > 5 and cm < 10: #turns the LED a certain color if the distance is  
-            Green = 0          #between 5 and 10 cm
-            Red = simpleio.map_range(cm, 5.1, 10, 255, 0)
-            Blue = simpleio.map_range(Red, 0, 255, 255, 0)
-            Anton.fill((Red, Green, Blue))
-        else: #if the distance is anything else, do the following:
-            
-            Blue = simpleio.map_range(cm, 10.1, 20, 255, 0)
-            Green = simpleio.map_range(Blue, 0, 255, 255, 0)
-            Anton.fill((0, Green, Blue))#setting the color with RGB values
-    except RuntimeError: #if there is a runtime error
-        print("Retrying!") #print "retrying" to the serial monitor
-    time.sleep(0.01) #delays the whole loop for one tenth of a second
-
+    except RuntimeError:
+        print("Retrying!")
+    time.sleep(0.1)
 ```
 
 ### Evidence
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/sensorvid.gif.gif?raw=true)
 
+(note: extract video by inspecting on canvas)
+
 ### Wiring
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/sensorwiring.png?raw=true)
 
+Credit goes to Anton weder
+
 ### Reflection
 
-The process to complete this assignment was very much similar to the Servo assignment, where all I had to do was copy some code down into my Visual Studio Code app, mess around with some of the colors, and move some files from, again, one lib folder to another. One thing I would do differently would be to try some easier solutions to the code. I just feel like the code I was using was too long for it’s purpose. 
-
+This assignment was relatively simple but I still required help from classmates. Their was some difficulty getting the distance sensor to display the right distances and getting the right libraries to apply.
 ---
 
 
