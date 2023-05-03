@@ -220,7 +220,7 @@ This assignment was more difficult because it was harder to correctly wire and c
 
 ---
 
-## CircuitPython Motor-Control(Stoped Here)
+## CircuitPython Motor-Control
 
 The purpose of this assignment was to use a Metro Express board to use a potentiometer to determine the speed at which a DC Motor spins. This was accomplished by determining a set range of values at which the DC motor turns on and starts spinning. Then, the more that the potentiometer turns, the faster the motor spins. The motor is being powered by a battery pack, and the potentiometer is powered by the board. 
 
@@ -276,56 +276,73 @@ Then on line 2 print a message for the following scenarios:
 ### Code
 
 ```python
-import board   #[Lines 1-8] Importing all Neccessary libraries to communicate with LCD
-import time
-from lcd.lcd import LCD
-from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
-from digitalio import DigitalInOut, Direction, Pull
 import board
 import analogio
+import time
+import digitalio
+from lcd.lcd import LCD
+from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 
 
-# get and i2c object
+
+# turn on lcd
+lcdPower = digitalio.DigitalInOut(board.D8)
+lcdPower.direction = digitalio.Direction.INPUT
+lcdPower.pull = digitalio.Pull.DOWN
+
+while lcdPower.value is False:
+    print("still sleeping")
+    time.sleep(0.1)
+
+time.sleep(1)
+print(lcdPower.value)
+print("running")
+
 i2c = board.I2C()
-tmp36 = analogio.AnalogIn(board.A0)
-# some LCDs are 0x3f... some are 0x27.
+
+
+
 lcd = LCD(I2CPCF8574Interface(i2c, 0x27), num_rows=2, num_cols=16)
-def tmp36_temperature_C(analogin):              #Convert millivolts to temperature
+TMP36_PIN = board.A0  # Analog input connected to TMP36 output.
+
+
+# Function to simplify the math of reading the temperature.
+def tmp36_temperature_C(analogin):
     millivolts = analogin.value * (analogin.reference_voltage * 1000 / 65535)
     return (millivolts - 500) / 10
 
 
+
+# Create TMP36 analog input.
+tmp36 = analogio.AnalogIn(TMP36_PIN)
+
+# Loop forever.
 while True:
     # Read the temperature in Celsius.
-    temp_C = tmp36_temperature_C(tmp36)  
+    temp_C = tmp36_temperature_C(tmp36)
     # Convert to Fahrenheit.
     temp_F = (temp_C * 9/5) + 32
     # Print out the value and delay a second before looping again.
-    lcd.set_cursor_pos(0, 0)           #[Lines 26-36] Print different messages based on the temperature
-    if temp_F > 75:
-        lcd.print("it's too hot!")
-    elif temp_F < 70:
-        lcd.print("it's too cold")
-    else:
-        lcd.print("It's just right")
-    lcd.set_cursor_pos(1, 0)
-    lcd.print("Temp: {}F".format(temp_F))
-    time.sleep(.5)
+    lcd.set_cursor_pos(0, 0)
+    print("Temperature: {}C {}F".format(temp_C, temp_F))
+
+    lcd.print(("Temperature: {}C {}F".format(temp_C, temp_F)))
+    lcd.print((" "))
+
+    time.sleep(1.0)
 ```
 
 ### Evidence
 
-![name](https://github.com/aweder05/CircuitPython/blob/master/media/ezgif.com-optimize.gif?raw=true)
+https://user-images.githubusercontent.com/112961442/236002711-28d7d7d1-f7fe-46df-956e-1ce27b852a48.mp4
 
 ### Wiring 
 
 ![name](https://user-images.githubusercontent.com/112981481/225733918-45b95248-ce2e-4b48-98c1-cc81cd542057.png)
 
 ### Reflection
+The hardest part about this project was figuring out how to make the LCD screen work. I've gotten it to work in the past, but with the temperature sensor, it's very difficult to get power to the LCD screen and it required additional wiring of a switch to be able to power some LED. I also probably spent a day looking for why my LED wouldn't display and found out that it was because I had the wrong brightness setting.
 
-The hardest part about this project was definitely figuring out how to make the LCD screen work. Ive gotten it to work in the past, but with the temperature sensor, it's very difficult to get power to the LCD screen and then on top of that make it finally print something else. Wiring was very simple, and could be figured out with two quick google searches. The code, on the other hand, was impossible for me, as is most everything else that uses Visual Studio code. All code credit goes to Kazuo Shinozaki. The only coding I did was a little bit of tweaking here and there to get the LCD work at the desired outcome. 
-
----
 
 ## Circuit Python Rotary Encoder
 
@@ -371,18 +388,114 @@ while True:
         led[0] = colors[position % len(colors)][1]
     last_position = position
     
-Credit for Code goes to River Lewis
+Credit for Code goes to Paul Weder
 
 ```
 
 ### Evidence
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/trafficlight.gif)
-##### Gif credits go to River Lewis
+Gif credits go to River Lewis
 
 ### Wiring 
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/Screenshot%202023-03-24%20155213.png)
+Credit goes to paul weder
+### Reflection
+This was by far the most difficult assignment and required a lot of help from more experienced coders. I had never used Strings, Arrays, or Constants in my code so it was a challenge to get them to work. Getting everything to work required a lot of guessing and checking and looking waht could went wrong from other errors that other classmates had.
+## CircuitPython Photointerrupters
+
+### Description 
+Wire up your photointerrupter and have it keep track of how many times it has been interrupted.
+Your program outputs the count using a full sentence like "The number of interrupts is: ___" or "I have been interrupted ___ times."
+The program outputs the sentence every 4 seconds.
+
+### Code
+
+```python
+import time
+import rotaryio
+import board
+from lcd.lcd import LCD
+from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
+from digitalio import DigitalInOut, Direction, Pull
+import digitalio
+
+lcdPower = digitalio.DigitalInOut(board.D7) #connects the lcd to pin 8
+lcdPower.direction = digitalio.Direction.INPUT #sets the lcd power flow as input
+lcdPower.pull = digitalio.Pull.DOWN #Pulls the power of the lcd down to ground
+
+while lcdPower.value is False: #creates an infinite loop that repeats until the lcd turns on
+    print("zzz")
+    time.sleep(0.1)
+
+print("I'm awake")
+
+encoder = rotaryio.IncrementalEncoder(board.D3, board.D2)
+last_position = 0
+btn = DigitalInOut(board.D1)
+btn.direction = Direction.INPUT
+btn.pull = Pull.UP
+state = 0
+Buttonyep = 1
+
+i2c = board.I2C()
+lcd = LCD(I2CPCF8574Interface(i2c, 0x27), num_rows=2, num_cols=16)
+
+ledGreen = DigitalInOut(board.D8)
+ledYellow = DigitalInOut(board.D9)
+ledRed = DigitalInOut(board.D10)
+ledGreen.direction = Direction.OUTPUT
+ledYellow.direction = Direction.OUTPUT
+ledRed.direction = Direction.OUTPUT
+
+while True:
+    position = encoder.position
+    if position != last_position:
+        if position > last_position:
+            state = state + 1
+        elif position < last_position:
+            state = state - 1
+        if state > 2:
+            state = 2
+        if state < 0:
+            state = 0
+        print(state)
+        if state == 0: 
+            lcd.set_cursor_pos(0, 0)
+            lcd.print("GOOOOO")
+        elif state == 1:
+            lcd.set_cursor_pos(0, 0)
+            lcd.print("yellow")
+        elif state == 2:
+            lcd.set_cursor_pos(0, 0)
+            lcd.print("STOPPP")
+    if btn.value == 0 and Buttonyep == 1:
+        print("buttion")
+        if state == 0: 
+                ledGreen.value = True
+                ledRed.value = False
+                ledYellow.value = False
+        elif state == 1:
+                ledYellow.value = True
+                ledRed.value = False
+                ledGreen.value = False
+        elif state == 2:
+                ledRed.value = True
+                ledGreen.value = False
+                ledYellow.value = False
+        Buttonyep = 0
+    if btn.value == 1:
+        time.sleep(.1)
+        Buttonyep = 1
+    last_position = position
+    Code credit goes to Grant.G
+```
+
+### Evidence
+https://user-images.githubusercontent.com/112961442/236007901-c63ca9db-4f76-42a7-afc1-2abdc947ee72.mp4
+Credit Grant.G
+### Wiring 
 
 ### Reflection
-
+This was eaisier than the prevous assignment because it dident include a LCD and only required us to record the Photointerupter individualy
