@@ -1,4 +1,4 @@
-# CircuitPython(Format has been copied this is not my own code, diagrams or reflections)
+# CircuitPython
 
 
 ## Table of Contents
@@ -83,9 +83,9 @@ while True:
 
 ### Evidence
 
-![name](https://github.com/aweder05/CircuitPython/blob/master/media/spinner.gif.gif?raw=true)
+https://user-images.githubusercontent.com/112961442/235830107-5aa59032-f6e4-4af6-ab1f-f41e59bc210d.mp4
 
-Credit goes to anton weder(I couldent extract my own video from canvas)
+
 ### Wiring
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/spinnerwiring.png?raw=true)
@@ -136,9 +136,9 @@ while True:
 
 ### Evidence
 
-![name](https://github.com/aweder05/CircuitPython/blob/master/media/sensorvid.gif.gif?raw=true)
+https://user-images.githubusercontent.com/112961442/235830258-77ac981e-e2e6-4537-bb08-402644bfe7b9.mp4
 
-(note: extract video by inspecting on canvas)
+
 
 ### Wiring
 
@@ -148,84 +148,77 @@ Credit goes to Anton weder
 
 ### Reflection
 
-This assignment was relatively simple but I still required help from classmates. Their was some difficulty getting the distance sensor to display the right distances and getting the right libraries to apply.
----
+This assignment was relatively simple but I still required help from classmates. Their was some difficulty getting the distance sensor to display the right distances and getting the right libraries to apply. At this point I was still getting used to Circut python and was revcving a lot of help form classmates
+
 
 
 ## LCD Backpack Button Counter with Toggle Feature
 
-The purpose of this assignment was to wire two buttons and an LCD backpack to a breadboard. Each time pushing the button wired to the digital 3 pin, the counter on the LCD would increase by one. But, when holding down the button wired to the digital 2 pin, and then pressing the other button while holding down the first one, the counter would decrease by one. All of this is printed on the liquid crystal display (LCD) backpack.
 
+The aim of this assignment was to connect two buttons and an LCD backpack to a breadboard and use them to manipulate a counter displayed on the LCD screen. Pressing one button would increase the counter by one, while pressing the other button while holding down the first one would decrease the counter by one. The count was displayed on the LCD controlled by a backpack.
 ### Description & Code
 
 ```python
 import board
-import time
 from lcd.lcd import LCD
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
+import time
 from digitalio import DigitalInOut, Direction, Pull
 
 # get and i2c object
 i2c = board.I2C()
-btn = DigitalInOut(board.D3)
-btn2 = DigitalInOut(board.D2)
+btn = DigitalInOut(board.D2)
 btn.direction = Direction.INPUT
 btn.pull = Pull.UP
-btn2.direction = Direction.INPUT
-btn2.pull = Pull.UP
-# some LCDs are 0x3f... some are 0x27.
-lcd = LCD(I2CPCF8574Interface(i2c, 0x27), num_rows=2, num_cols=16)
-cur_state = True
-prev_state = True
-cur_state2 = True
-prev_state2 = True
-buttonPress = 0
+clickCount = 0
 
+switch = DigitalInOut(board.D3)
+switch.direction = Direction.INPUT
+switch.pull = Pull.UP
+# some LCDs are 0x3f... some are 0x27...
+lcd = LCD(I2CPCF8574Interface(i2c, 0x3f), num_rows=2, num_cols=16)
+
+lcd.print("Jakob")
+print("son, i am disapointment.")
 while True:
-    while btn2.value == False:
-        cur_state = btn.value
-        if cur_state != prev_state:
-            if not cur_state:
-                buttonPress = buttonPress + 1
-                lcd.clear()
-                lcd.set_cursor_pos(0,0)
-                lcd.print(str(buttonPress))
-            else:
-                lcd.clear()
-                lcd.set_cursor_pos(0,0)
-                lcd.print(str(buttonPress))
-        prev_state = cur_state
+    if not switch.value:
+        if not btn.value:
+            lcd.clear()
+            lcd.set_cursor_pos(0, 0)
+            lcd.print("Click Count:")
+            lcd.set_cursor_pos(0,13)
+            clickCount = clickCount + 1
+            lcd.print(str(clickCount))
+        else:
+            pass
     else:
-        cur_state2 = btn.value
-        if cur_state2 != prev_state2:
-            if not cur_state2:
-                buttonPress = buttonPress - 1
-                lcd.clear()
-                lcd.set_cursor_pos(0,0)
-                lcd.print(str(buttonPress))
-            else:
-                lcd.clear()
-                lcd.set_cursor_pos(0,0)
-                lcd.print(str(buttonPress))
-        prev_state2 = cur_state2
-
+        if not btn.value:
+            lcd.clear()
+            lcd.set_cursor_pos(0, 0)
+            lcd.print("Click Count:")
+            lcd.set_cursor_pos(0,13)
+            clickCount = clickCount - 1
+            lcd.print(str(clickCount))
+        else:
+            pass
+    time.sleep(0.1) # sleep for debounce
 ```
 
 ### Evidence
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/lcdbuttontoggle.gif.gif?raw=true)
-
+Credit goes to Anton Weder
 ### Wiring
 
 ![name](https://github.com/aweder05/CircuitPython/blob/master/media/lcdbuttontogglewiring.png?raw=true)
-
+Credit goes to Anton Weder
 ### Reflection
 
-This assignment was more difficult than the other three just because it took a while to nail down the wiring and to tweak around with the code.
+This assignment was more difficult because it was harder to correctly wire and code the LCD as well as connecting the buttons.
 
 ---
 
-## CircuitPython Motor-Control
+## CircuitPython Motor-Control(Stoped Here)
 
 The purpose of this assignment was to use a Metro Express board to use a potentiometer to determine the speed at which a DC Motor spins. This was accomplished by determining a set range of values at which the DC motor turns on and starts spinning. Then, the more that the potentiometer turns, the faster the motor spins. The motor is being powered by a battery pack, and the potentiometer is powered by the board. 
 
