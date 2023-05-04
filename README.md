@@ -495,9 +495,9 @@ while True:
 ### Evidence
 https://user-images.githubusercontent.com/112961442/236007901-c63ca9db-4f76-42a7-afc1-2abdc947ee72.mp4
 
-Credit Grant.G (couldent extract)
+Credit Grant.G Couldent extract
 
 ### Wiring 
 
 ### Reflection
-This was eaisier than the prevous assignment because it dident include a LCD and only required us to record the Photointerupter individualy
+This was eaisier than the prevous assignment because it dident include a LCD and only required us to record the Photointerupter individualy with the serial monitor. It also was a way to contrast arduino and circut python as we did this exact assignment last year but it was done in arduino.
